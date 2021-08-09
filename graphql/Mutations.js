@@ -75,10 +75,27 @@ const updatePost = {
         title :{ type : GraphQLString },
         body : { type : GraphQLString }, 
     },
-    resolve(parent,args ,{ verifiedUser }){
+    async resolve(parent,args ,{ verifiedUser }){
         if(!verifiedUser){
             throw new Error("User not authenticated");
-        }                
+        }        
+        
+        const updatePost = await Post.findOneAndUpdate({
+            _id : args.id,
+            userID:verifiedUser.user._id            
+        },
+        { 
+            title : args.title ,
+            body : args.body 
+        },{
+            new : true,
+            runValidators : true
+        });
+        
+        if(!updatePost){
+            throw new Error("No Post found with the given ID");
+        }
+        return updatePost;        
     }
 };
 
@@ -106,4 +123,4 @@ const AddComment = {
 };
 
 
-module.exports = { Register , Login ,AddPost ,AddComment};
+module.exports = { Register , Login ,AddPost ,AddComment , updatePost};
