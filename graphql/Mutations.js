@@ -128,7 +128,7 @@ const deletePost = {
     args:{
         postID:{ type : GraphQLString }
     },
-    resolve(parent,args,{ verifiedUser }){
+    async resolve(parent,args,{ verifiedUser }){
         const post = await Post.findByIdAndDelete({
             _id:args.id,userID:verifiedUser.user._id
         })
