@@ -122,5 +122,18 @@ const AddComment = {
     }
 };
 
+const deletePost = {
+    type : PostType,
+    description : "Deleting post",
+    args:{
+        postID:{ type : GraphQLString }
+    },
+    resolve(parent,args,{ verifiedUser }){
+        const post = await Post.findByIdAndDelete({
+            _id:args.id,userID:verifiedUser.user._id
+        })
+    }
+};
 
-module.exports = { Register , Login ,AddPost ,AddComment , updatePost};
+
+module.exports = { Register , Login ,AddPost ,AddComment , updatePost , deletePost};
