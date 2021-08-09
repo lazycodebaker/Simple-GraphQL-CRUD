@@ -1,5 +1,5 @@
 
-const { GraphQLString } = require('graphql');
+const { GraphQLString, GraphQLID } = require('graphql');
 const { User,Post,Comment } = require('../models/index');
 const { PostType ,CommentType } = require('./Types');
 const { createJwtToken } = require('../utils/auth');
@@ -66,6 +66,22 @@ const AddPost = {
         return newPost.save();
     }
 };
+
+const updatePost = {
+    type : PostType,
+    description : "Update User Post",
+    args:{
+        id : { type : GraphQLID },
+        title :{ type : GraphQLString },
+        body : { type : GraphQLString }, 
+    },
+    resolve(parent,args ,{ verifiedUser }){
+        if(!verifiedUser){
+            throw new Error("User not authenticated");
+        }                
+    }
+};
+
 
 const AddComment = {
     type : CommentType,
